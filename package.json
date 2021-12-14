@@ -1,0 +1,43 @@
+{
+  "name": "timetableapp",
+  "version": "1.0.0",
+  "description": "timetable and notes application",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server",
+    "server": "nodemon server",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "atpl": "^0.9.3",
+    "babel-core": "^6.26.3",
+    "bcryptjs": "^2.4.3",
+    "bracket-template": "^1.1.5",
+    "coffee-script": "^1.12.7",
+    "config": "^3.3.6",
+    "consolidate": "^0.16.0",
+    "dot": "^1.1.3",
+    "dotenv": "^10.0.0",
+    "dustjs-linkedin": "^2.7.5",
+    "eco": "^1.1.0-rc-3",
+    "ect": "^0.5.9",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.1",
+    "haml-coffee": "^1.14.1",
+    "jsonwebtoken": "^8.5.1",
+    "mailgun": "^0.5.0",
+    "mailgun-js": "^0.22.0",
+    "mongoose": "^6.0.3",
+    "nodemailer": "^6.6.5",
+    "nodemailer-mailgun-transport": "^2.1.3",
+    "react-swipeable-views": "^0.14.0",
+    "socket.io": "^4.2.0"
+  },
+  "devDependencies": {
+    "concurrently": "^6.2.1",
+    "nodemon": "^2.0.12"
+  }
+}
