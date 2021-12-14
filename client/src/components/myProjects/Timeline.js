@@ -5,6 +5,9 @@ import { useSelector } from "react-redux";
 import moment from "moment";
 import { useState } from "react";
 import ModifyProject from "./ModifyProject";
+import NewProject from "./NewProject";
+import AddIcon from "@material-ui/icons/Add";
+import AddNewTask from "./AddNewTask";
 
 const {
   AccordionSummary,
@@ -153,6 +156,7 @@ const MonthTimeline = ({ projects }) => {
   };
 
   const open = Boolean(anchorEl);
+  const open2 = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
   const startDate = dateObject.date.startDateToUse;
   const endDate = dateObject.date.endDateToUse;
@@ -190,6 +194,15 @@ const MonthTimeline = ({ projects }) => {
     );
   };
 
+  const [showShare, setShowShare] = useState(true);
+
+  const handleCLickNotif = (event, project) => {
+    setProject(project)
+    setShowShare(false);
+    handleClick(event);
+  };
+
+
   return (
     <div style={styles.container}>
       <ScrollContainer
@@ -197,6 +210,7 @@ const MonthTimeline = ({ projects }) => {
         horizontal={true}
         vertical={false}
       >
+        <div style={{overflow:'scroll'}}>
         <div>
           <div style={{ width: 300 }}></div>
           <div style={{ ...styles.flexRow, marginLeft: 300 }}>
@@ -253,7 +267,9 @@ const MonthTimeline = ({ projects }) => {
                   }}
                   expandIcon={<ExpandMoreIcon />}
                 >
-                  <Typography>{project.name}</Typography>
+                  <Button aria-describedby={id}
+                onClick={(event) => handleCLickNotif(event, project)}><AddIcon fontSize='small' /></Button>
+                <Typography>{project.name}</Typography>
                 </AccordionSummary>
                 {project.tasks.map((task, index) => (
                   <div style={styles.flexRow}>
@@ -342,6 +358,7 @@ const MonthTimeline = ({ projects }) => {
             </div>
           ))}
         </div>
+        </div>
         <Popover
           id={id}
           open={open}
@@ -358,6 +375,27 @@ const MonthTimeline = ({ projects }) => {
         >
           <ModifyProject handleClose={handleClose} project={project} />
         </Popover>
+        <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "right",
+        }}
+        transformOrigin={{
+          vertical: "top",
+          horizontal: "left",
+        }}
+      >
+
+        {showShare ? (
+          <NewProject handleClose={handleClose} />
+        ) : (
+          <AddNewTask handleClose={handleClose} />
+        )}
+      </Popover>
       </ScrollContainer>
     </div>
   );

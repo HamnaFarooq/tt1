@@ -76,13 +76,13 @@ export default function DateRange() {
 
     return (
         <div>
-            <div style={{ display: "flex", flexDirection: "row" }}>
+            {/* <div style={{ display: "flex", flexDirection: "row" }}>
                 <div style={{ paddingRight: 16 }}>
                     <Button onClick={() => toggleDateMenu(!dateMenu)}><DateRangeIcon style={{ paddingRight: 6 }} />{dateMenu ? "Confirm" : `${startDate} - ${endDate}`}</Button>
                 </div>
             </div>
 
-            {dateMenu && (
+            {dateMenu && ( */}
                 <div style={{ display: "flex", flexDirection: "row" }}>
                     <div style={{ paddingRight: 16 }}>
                         <TextField
@@ -110,7 +110,7 @@ export default function DateRange() {
                         />
                     </div>
                 </div>
-            )}
+            {/* )} */}
 
 
         </div>

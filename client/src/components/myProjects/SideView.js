@@ -133,7 +133,7 @@ const SideView = () => {
 
               <Button aria-describedby={id}
                 onClick={(event) => handleCLickNotif(event, project)}
-                style={{ paddingLeft: 16 }} >Add new task <AssignmentIcon fontSize='small' /></Button>
+                style={{ paddingLeft: 16, width: '-webkit-fill-available' }} >Add new task <AssignmentIcon fontSize='small' /></Button>
 
 
             </Accordion>

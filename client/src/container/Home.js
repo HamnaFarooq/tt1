@@ -29,7 +29,7 @@ const Home = () => {
                 {/* {projectObj.projects.projects.length === 0 ? <TaskCreate /> : <SideView />} */}
             </div>
             {/* <div style={{ width: "78%" }}> */}
-            <div>
+            <div style={{width: '100%', overflow: 'hidden'}}>
                 {/* {console.log("projets: ", projectObj.projects.projects.length)} */}
                 {isAuthenticatedVal.isAuthenticated && projectObj.projects?.projects?.length > 0 && <Dashboard projects={projectObj.projects.projects} />}
             </div>

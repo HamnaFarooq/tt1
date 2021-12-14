@@ -30,7 +30,7 @@ const styles = {
   projectBar: {
     display: "flex",
     backgroundColor: "#042f66",
-    justifyContent: "space-between",
+    justifyContent: "end",
     alignItems: "center",
     color: "white",
     paddingLeft: 12,
@@ -180,59 +180,6 @@ const ModifyProject = ({ handleClose, project }) => {
 
   const HeaderBar = () => (
     <div style={styles.projectBar}>
-      <ButtonGroup disableElevation>
-        <Button
-          onClick={() => {
-            if (!edit) {
-              setEdit(!edit);
-              deleteBtn && setDelete(!deleteBtn);
-              duplicate && setDuplicate(!duplicate);
-            }
-          }}
-          style={{
-            borderWidth: 0,
-            color: edit ? "royalblue" : "white",
-          }}
-        >
-          Edit
-        </Button>
-        <Button
-          onClick={() => {
-            if (!deleteBtn) {
-              setDelete(!deleteBtn);
-              edit && setEdit(!edit);
-              duplicate && setDuplicate(!duplicate);
-            }
-          }}
-          style={{
-            borderWidth: 0,
-            borderLeftWidth: 1,
-            borderColor: "white",
-            color: "white",
-            color: deleteBtn ? "royalblue" : "white",
-          }}
-        >
-          Delete
-        </Button>
-        <Button
-          onClick={() => {
-            if (!duplicate) {
-              setDuplicate(!duplicate);
-              deleteBtn && setDelete(!deleteBtn);
-              edit && setEdit(!edit);
-            }
-          }}
-          style={{
-            borderWidth: 0,
-            borderLeftWidth: 1,
-            borderColor: "white",
-            color: "white",
-            color: duplicate ? "royalblue" : "white",
-          }}
-        >
-          Duplicate
-        </Button>
-      </ButtonGroup>
       <IconButton
         onClick={handleClose}
         style={{ color: "white" }}

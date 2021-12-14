@@ -142,6 +142,7 @@ const Navbar = () => {
             {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton> */}
+            <a href="/">
             <Typography
               variant="h5"
               style={{ fontWeight: "bold", color: "#042f66", flexGrow: 'inherit', marginRight: '1rem' }}
@@ -149,6 +150,7 @@ const Navbar = () => {
             >
               Taskview
             </Typography>
+            </a>
             {isAuthenticatedVal.isAuthenticated ? authLinks : guestLinks}
           </Toolbar>
         </AppBar>
