@@ -41,7 +41,9 @@ function endDateSelector() {
 }
 
 
-export default function DateRange() {
+export default function DateRange(props) {
+	
+	const {index, handleChangeStartDate, handleChangeEndDate} = props;
 
     const dispatch = useDispatch();
 
@@ -55,6 +57,7 @@ export default function DateRange() {
 
 
     const handleChangeForStartDate = (e) => {
+		handleChangeStartDate && handleChangeStartDate(e.target.value,index)
         setStartDate(e.target.value);
         // setStartDateToUse(e.target.value);
         setStartDateToUse(e.target.value);
@@ -65,6 +68,7 @@ export default function DateRange() {
     };
 
     const handleChangeForEndDate = (e) => {
+		handleChangeEndDate && handleChangeEndDate(e.target.value,index);
         setEndDate(e.target.value);
         // setEndDateToUse(e.target.value);
         setEndDateToUse(e.target.value);

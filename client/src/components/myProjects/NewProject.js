@@ -47,32 +47,58 @@ const NewProject = ({ handleClose }) => {
   const [projectName, setProjectName] = useState('');
   const [taskName, setTaskName] = useState('');
   const [priority, setPriority] = useState('');
+  const d = new Date();
+  const [inputList, setInputList] = useState([ {name: "",
+    description: '',
+    // startDate: dateValueObj.date.startDateToUse,
+    // endDate: dateValueObj.date.endDateToUse
+    startDate: moment(d).format('DD MM YYYYThh:mm'),
+    endDate: moment(d).format('DD MM YYYYThh:mm'),
+    }]);
 
   const dateValueObj = useSelector(state => state.date);
-  // console.log("date val in NewProject is: ", moment(dateValueObj.date.startDateToUse).format("DD/MM/YYYY"));
-  const tasks = [
-    {
-      name: taskName,
-      description: '',
-      // startDate: dateValueObj.date.startDateToUse,
-      // endDate: dateValueObj.date.endDateToUse
-      startDate: moment(dateValueObj.date.startDateToUse).format('DD MM YYYYThh:mm'),
-      endDate: moment(dateValueObj.date.endDateToUse).format('DD MM YYYYThh:mm'),
-      priority
-      // startDate: moment(dateValueObj.date.startDateToUse).format("DD/MM/YYYY"),
-      // endDate: moment(dateValueObj.date.endDateToUse).format("DD/MM/YYYY")
-    }
-  ];
+  
+	const handleInputChange = (e, index) => {
+		console.log("e.target",e.target)
+	const {name, value } = e.target;
+	const list = [...inputList];
+	console.log("List",list)
+	list[index].name = value;
+	setInputList(list);
+	};
 
 
   const createProjectAndReinitializeFields = () => {
-    dispatch(createProject(projectName, tasks, priority));
+	  console.log("inputList",inputList);
+    dispatch(createProject(projectName, inputList, priority));
     setProjectName('');
     setTaskName('');
     handleClose()
   }
+  const handleAddClick = () => {
+	  const d = new Date();
+  setInputList([...inputList, {name: "",
+    description: '',
+    // startDate: dateValueObj.date.startDateToUse,
+    // endDate: dateValueObj.date.endDateToUse
+    startDate: moment(d).format('DD MM YYYYThh:mm'),
+    endDate: moment(d).format('DD MM YYYYThh:mm'),
+    }]);
+};
 
+const handleChangeForStartDate = (startDate,index) =>{
+	const list = [...inputList];
+	console.log("List",list)
+	list[index].startDate = moment(startDate).format('DD MM YYYYThh:mm');
+	setInputList(list);
+}
 
+const handleChangeForEndDate = (endDate, index) =>{
+	const list = [...inputList];
+	console.log("List",list)
+	list[index].endDate = moment(endDate).format('DD MM YYYYThh:mm');
+	setInputList(list);
+}
 
 
   return (
@@ -91,13 +117,22 @@ const NewProject = ({ handleClose }) => {
         <div
           style={{
             padding: 16,
+            maxHeight: 480,
+            height: "100%",
+            overflow: "auto"
           }}
         >
           <div style={{ paddingTop: 8, paddingBottom: 24 }}>
             <InputLabel style={{ margin: 8 }}>Project</InputLabel>
             <TextField variant="outlined" size="small" placeholder="Name" value={projectName} onChange={(e) => setProjectName(e.target.value)} />
           </div>
-          <div style={{ paddingTop: 8, paddingBottom: 8 }}>
+		  <Button onClick={() => { handleAddClick() }} color="primary" size="small">
+          Add Task
+        </Button>
+		{
+			inputList.map((item,index)=>{
+				return(
+          <div key={index} style={{ paddingTop: 8, paddingBottom: 8 }}>
             <div
               style={{
                 display: "flex",
@@ -115,6 +150,8 @@ const NewProject = ({ handleClose }) => {
                 <TaskRow key={i} />
               ))}
             </List> */}
+			
+		
             <div
               style={{
                 display: "flex",
@@ -126,16 +163,21 @@ const NewProject = ({ handleClose }) => {
                 variant="outlined"
                 size="small"
                 placeholder="Name"
-                value={taskName}
-                onChange={(e) => setTaskName(e.target.value)}
+                value={item.name}
+                onChange={(e) => handleInputChange(e, index)}
               />
               <InputLabel style={{ marginLeft: 8, marginTop: 10 }}>Date</InputLabel>
 
-              <DateRange />
+              <DateRange handleChangeStartDate={handleChangeForStartDate} index={index} handleChangeEndDate={handleChangeForEndDate} />
 
             </div>
+	
           </div>
+          		)
+            })
+          }
         </div>
+		
         <Button onClick={() => { createProjectAndReinitializeFields() }} color="primary" size="small">
           Done
         </Button>
