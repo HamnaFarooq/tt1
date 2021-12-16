@@ -216,6 +216,7 @@ export default function ShareMenu({ handleClose }) {
               onChange={handlesharelink}
               fullWidth
               id="outlined-basic"
+              disabled={true}
               label={
                 age?.name
                   ? `${age.name} will be shared`
