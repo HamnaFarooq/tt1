@@ -234,6 +234,7 @@ const ModifyProject = ({ handleClose, project }) => {
                 style={{ marginBottom: 8 }}
                 variant="outlined"
                 size="small"
+                disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
               />
             </div>
             <div style={{ marginLeft: 4 }}>
@@ -247,6 +248,7 @@ const ModifyProject = ({ handleClose, project }) => {
                 style={{ marginBottom: 8 }}
                 variant="outlined"
                 size="small"
+                disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
               />
             </div>
           </div>
@@ -263,6 +265,7 @@ const ModifyProject = ({ handleClose, project }) => {
               marginBottom: 8,
             }}
             rows={5}
+            disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
           />
           <Typography style={{ fontWeight: "bold" }} variant="subtitle2">
             Start Date
@@ -277,6 +280,7 @@ const ModifyProject = ({ handleClose, project }) => {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
           />
           <Typography style={{ fontWeight: "bold" }} variant="subtitle2">
             Due Date
@@ -292,6 +296,7 @@ const ModifyProject = ({ handleClose, project }) => {
             InputLabelProps={{
               shrink: true,
             }}
+            disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
           />
           <div style={styles.flexRow}>
             <div style={{ marginRight: 16 }}>
@@ -304,6 +309,7 @@ const ModifyProject = ({ handleClose, project }) => {
                 value={priority ? priority : (project.priority ? project.priority : priority)}//{project.priority ? project.priority : priority}
                 onChange={handleChange}
                 label="Age"
+                disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
               >
                 <MenuItem value="">
                   <em>None</em>
@@ -340,21 +346,27 @@ const ModifyProject = ({ handleClose, project }) => {
           <Button variant="contained" color="primary" onClick={() => {
             dispatch(editTask(project._id, task_id, projectName, project.comments, task, editType, priority))
             handleClose()
-          }}>
+          }}
+          disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
+          >
             Apply Changes
           </Button>
 
           <Button variant="contained" color="inherit" style={{ marginTop: 20 }} onClick={() => {
             dispatch(duplicateTask(project._id, taskDuplicate))
             handleClose()
-          }}>
+          }}
+          disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
+          >
             Duplicate task {project.tasks[index].name}
           </Button>
 
           <Button variant="contained" color="secondary" style={{ marginTop: 20 }} onClick={() => {
             dispatch(deleteTask(project._id, task_id))
             handleClose()
-          }}>
+          }}
+          disabled={project.alteration[project.index]?.editType === "viewer" ? true : false}
+          >
             Delete task {project.tasks[index].name}
           </Button>
         </div>

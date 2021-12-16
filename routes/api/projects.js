@@ -286,7 +286,12 @@ router.post('/share/:project_id', auth, async (req, res) => {
         }
 
         const project = await Project.findOne({ _id: req.params.project_id });
-
+        let sharedObj = {
+            user : user._id,
+            editType: req.body.shareType
+        }
+        await project.alteration.unshift(sharedObj);
+        await project.save();
         await user.projects.unshift(project._id);
 
         await user.save();

@@ -39,7 +39,7 @@ const data = [
 ];
 
 const styles = {
-  container: { display: "flex", flexDirection: "column", width: 300 },
+  container: { display: "flex", flexDirection: "column", width: 300, marginRight: 25},
   projectBar: {
     display: "flex",
     backgroundColor: "#042f66",

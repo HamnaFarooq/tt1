@@ -50,8 +50,7 @@ export const createTask = (project_id, tasks, editType) => async dispatch => {
 
 
 export const editTask = (project_id, task_id, projectName, comments, task, editType, priority) => async dispatch => {
-
-    const config = {
+   const config = {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -124,7 +123,7 @@ export const getAllProjects = () => async dispatch => {
 
 
 
-export const shareProject = (project_id, email) => async dispatch => {
+export const shareProject = (project_id, email, shareType) => async dispatch => {
 
     const config = {
         headers: {
@@ -132,12 +131,12 @@ export const shareProject = (project_id, email) => async dispatch => {
         }
     }
 
-    const body = { email };
+    const body = { email, shareType };
 
     try {
         const res = await axios.post(`/api/projects/share/${project_id}`, body, config);
         // dispatch({ type: TASK_EDITED, payload: res.data });
-        console.log("project shared")
+        alert("Project shared")
     } catch (err) {
         if (err) {
             console.error(err);
