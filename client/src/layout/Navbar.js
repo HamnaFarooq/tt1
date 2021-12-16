@@ -138,11 +138,11 @@ const Navbar = () => {
     <Fragment>
       <div className={classes.root}>
         <AppBar position="static" color="inherit">
-          <Toolbar variant="dense">
+          <Toolbar variant="dense" >
             {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
               <MenuIcon />
             </IconButton> */}
-            <a href="/">
+            <a href="/" style={{width:"85%"}}>
             <Typography
               variant="h5"
               style={{ fontWeight: "bold", color: "#042f66", flexGrow: 'inherit', marginRight: '1rem' }}
