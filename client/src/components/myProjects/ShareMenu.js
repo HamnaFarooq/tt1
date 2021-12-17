@@ -110,7 +110,8 @@ export default function ShareMenu({ handleClose }) {
       subject: "Invite",
       text: sharelink,
     };
-
+    console.log("mailOptions",mailOptions)
+    console.log("transporter",transporter)
     transporter.sendMail(mailOptions, (err, data) => {
       if (err) {
         console.log("Error", err);
