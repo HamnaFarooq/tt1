@@ -155,8 +155,8 @@ const MonthTimeline = ({ projects }) => {
 
   const handleClose = () => {
     setAnchorEl(null);
-    setShowProjectDetail(false)
-    setShowShare(false)
+    setShowProjectDetail(false);
+    setShowShare(false);
   };
 
   const open = Boolean(anchorEl);
@@ -197,7 +197,6 @@ const MonthTimeline = ({ projects }) => {
       "days"
     );
   };
-
 
   const handleCLickNotif = (event, project, index) => {
     console.log("evet", event);
@@ -281,10 +280,18 @@ const MonthTimeline = ({ projects }) => {
                       onClick={(event) =>
                         handleCLickNotif(event, project, index)
                       }
+                      style={{
+                        position: "absolute",
+                        left: 0,
+                        width: 31,
+                        background: "gray",
+                        height: "100%",
+                        top: 0,
+                      }}
                     >
-                      <AddIcon fontSize="small" />
+                      <AddIcon style={{borderRadius: "100%",border: '1px solid white'}} fontSize="small" />
                     </ButtonBase>
-                    <Typography>{project.name}</Typography>
+                    <Typography style={{marginLeft:20}}>{project.name}</Typography>
                   </AccordionSummary>
                   {project.tasks.map((task, index) => (
                     <div style={styles.flexRow}>
@@ -435,7 +442,7 @@ const MonthTimeline = ({ projects }) => {
               horizontal: "left",
             }}
           >
-            <AddNewTask handleClose={handleClose} project={project}/>
+            <AddNewTask handleClose={handleClose} project={project} />
           </Popover>
         )}
       </ScrollContainer>
