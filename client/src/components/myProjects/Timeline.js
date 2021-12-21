@@ -3,11 +3,13 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ModifyProject from "./ModifyProject";
 import NewProject from "./NewProject";
 import AddIcon from "@material-ui/icons/Add";
 import AddNewTask from "./AddNewTask";
+import { dateForTimeline } from "../../store/action/date";
+import { useDispatch } from "react-redux";
 
 const {
   AccordionSummary,
@@ -133,6 +135,8 @@ const styles = {
 };
 
 const MonthTimeline = ({ projects }) => {
+  const dispatch = useDispatch();
+
   const dateObject = useSelector((state) => state.date);
   // console.log("----------- ", dateObject.date)
   const [anchorEl, setAnchorEl] = useState(null);
@@ -204,6 +208,89 @@ const MonthTimeline = ({ projects }) => {
     setShowShare(true);
     handleClick(event);
   };
+
+  useEffect(() => {
+    if (!projects?.length) return;
+    let item = projects
+      .flatMap((p) => p.tasks)
+      .filter((t) => t.endDate)
+      ?.sort((o, n) =>{
+        let startDate = o.endDate.replace(/\s/g, "");
+        var tmp = startDate.split("");
+        tmp.splice(8, tmp.length);
+        startDate = tmp.join("");
+        startDate =
+          startDate[4] +
+          startDate[5] +
+          startDate[6] +
+          startDate[7] +
+          "-" +
+          startDate[2] +
+          startDate[3] +
+          "-" +
+          startDate[0] +
+          startDate[1];
+        let endDate = n.endDate.replace(/\s/g, "");
+        var tmp1 = endDate.split("");
+        tmp1.splice(8, tmp1.length);
+        endDate = tmp1.join("");
+        endDate =
+          endDate[4] +
+          endDate[5] +
+          endDate[6] +
+          endDate[7] +
+          "-" +
+          endDate[2] +
+          endDate[3] +
+          "-" +
+          endDate[0] +
+          endDate[1];
+       return moment(startDate).isBefore(endDate)
+          ? -1
+          : moment(endDate).isAfter(endDate)
+          ? 1
+          : 0
+      }
+      )
+      .pop();
+      console.log(item)
+    let startDate = item.startDate.replace(/\s/g, "");
+    var tmp = startDate.split("");
+    tmp.splice(8, tmp.length);
+    startDate = tmp.join("");
+    startDate =
+      startDate[4] +
+      startDate[5] +
+      startDate[6] +
+      startDate[7] +
+      "-" +
+      startDate[2] +
+      startDate[3] +
+      "-" +
+      startDate[0] +
+      startDate[1];
+    let endDate = item.endDate.replace(/\s/g, "");
+    var tmp1 = endDate.split("");
+    tmp1.splice(8, tmp1.length);
+    endDate = tmp1.join("");
+    endDate =
+      endDate[4] +
+      endDate[5] +
+      endDate[6] +
+      endDate[7] +
+      "-" +
+      endDate[2] +
+      endDate[3] +
+      "-" +
+      endDate[0] +
+      endDate[1];
+    dispatch(
+      dateForTimeline({
+        startDateToUse: startDate,
+        endDateToUse: endDate,
+      })
+    );
+  }, [dispatch, projects]);
 
   return (
     <div style={styles.container}>
@@ -289,9 +376,17 @@ const MonthTimeline = ({ projects }) => {
                         top: 0,
                       }}
                     >
-                      <AddIcon style={{borderRadius: "100%",border: '1px solid white'}} fontSize="small" />
+                      <AddIcon
+                        style={{
+                          borderRadius: "100%",
+                          border: "1px solid white",
+                        }}
+                        fontSize="small"
+                      />
                     </ButtonBase>
-                    <Typography style={{marginLeft:20}}>{project.name}</Typography>
+                    <Typography style={{ marginLeft: 20 }}>
+                      {project.name}
+                    </Typography>
                   </AccordionSummary>
                   {project.tasks.map((task, index) => (
                     <div style={styles.flexRow}>
