@@ -123,7 +123,7 @@ export const getAllProjects = () => async dispatch => {
 
 
 
-export const shareProject = (project_id, email, shareType) => async dispatch => {
+export const shareProject = (project_id,project_name, email, shareType, authDetail) => async dispatch => {
 
     const config = {
         headers: {
@@ -131,7 +131,14 @@ export const shareProject = (project_id, email, shareType) => async dispatch => 
         }
     }
 
-    const body = { email, shareType };
+    let userData = {
+        email: email,
+        projectName: project_name,
+        shareType: shareType,
+        senderData:authDetail
+    }
+
+    const body = { userData };
 
     try {
         const res = await axios.post(`/api/projects/share/${project_id}`, body, config);
