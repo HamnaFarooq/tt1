@@ -3,10 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 
-import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import Button from "@material-ui/core/Button";
 
@@ -16,15 +13,7 @@ import { IconButton } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import { getAllProjects } from "../../store/action/project";
 import { shareProject } from "../../store/action/project";
-// const nodemailer=require('nodemailer')
-// const mailGun=require('nodemailer-mailgun-transport')
-// var api_key='d3dc735ba7238a8327b568755e9d21ea-45f7aa85-dddb7d46'
-// var domain='sandbox9e41edac87014c00807064fe2d86cf7e.mailgun.org'
-// var mailgun=require('mailgun-js')({apiKey:api_key,domain:domain})
-// const sendmail=require('../../mail')
 require("dotenv").config();
-const nodemailer = require("nodemailer");
-const Mail = require("nodemailer/lib/mailer");
 
 const useStyles = makeStyles((theme) => ({
   dimensions: {
@@ -67,6 +56,8 @@ const styles = {
 
 export default function ShareMenu({ handleClose }) {
   const dispatch = useDispatch();
+  const isAuthenticatedVal = useSelector((state) => state.auth);
+
 
   const [userEmail, setUserEmail] = useState("");
   const [sharelink, setsharelink] = useState("");
@@ -92,40 +83,11 @@ export default function ShareMenu({ handleClose }) {
     setsharelink(e.target.value);
   };
 
-  console.log("sharelink :>> ", sharelink);
-  console.log("userEmail :>> ", userEmail);
-
-  let transporter = nodemailer.createTransport({
-    service: "gmail",
-    auth: {
-      user: process.env.user,
-      pass: process.env.pass,
-    },
-  });
-
-  const mailsend = () => {
-    let mailOptions = {
-      from: "abdurrehmanzab@gmail.com",
-      to: userEmail,
-      subject: "Invite",
-      text: sharelink,
-    };
-    console.log("mailOptions",mailOptions)
-    console.log("transporter",transporter)
-    transporter.sendMail(mailOptions, (err, data) => {
-      if (err) {
-        console.log("Error", err);
-      } else {
-        console.log("Mail Sent!");
-      }
-    });
-  };
 
   const executeShareAndHandleClose = () => {
-    dispatch(shareProject(age._id, userEmail,shareType));
+    dispatch(shareProject(age._id,age.name, userEmail,shareType,isAuthenticatedVal.user));
     handleClose();
 
-    mailsend();
   };
 
   const data = [

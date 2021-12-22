@@ -3,11 +3,10 @@ const router = express.Router();
 // const { check, validationResult } = require('express-validator/check');
 const config = require("config");
 const auth = require("../../middleware/auth");
-
+const nodemailer = require("nodemailer");
 const Project = require("../../models/Projects");
 const User = require("../../models/User");
 const mongoose = require("mongoose");
-const mail_util = require("./mail_utils");
 
 /* ROUTES THAT ARE COMPLETED:
 A) CREATE PROJECT
@@ -297,7 +296,8 @@ router.get("/:project_id/", auth, async (req, res) => {
 // @access Private
 router.post("/share/:project_id", auth, async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    let data = req.body.userData;
+    const user = await User.findOne({ email: data.email });
 
     if (!user) {
       return res.json({ msg: "user does not exist" });
@@ -306,7 +306,7 @@ router.post("/share/:project_id", auth, async (req, res) => {
     const project = await Project.findOne({ _id: req.params.project_id });
     let sharedObj = {
       user: user._id,
-      editType: req.body.shareType,
+      editType: data.shareType,
     };
     await project.alteration.unshift(sharedObj);
     await project.save();
@@ -314,18 +314,19 @@ router.post("/share/:project_id", auth, async (req, res) => {
 
     await user.save();
     let emailContext = {
-      name: user.email,
-      password: user.password,
+      email: data.email,
+      project: `${
+        data.senderData.name +
+        " shared " +
+        data.projectName +
+        " project with you his/her email address is " +
+        data.senderData.email +
+        " and you can " +
+        data.shareType +
+        " it "
+      }`,
     };
-
-    const subject = "Share Project`";
-    const template_name = "reset_password.html";
-    mail_util.sendEmailWithTemplate(
-      template_name,
-      "talhanadeemwahga43@gmail.com",
-      subject,
-      emailContext
-    );
+    sendEmail(emailContext);
     res.json(user);
   } catch (err) {
     console.error(err.message);
@@ -380,5 +381,38 @@ router.post("/priority/:id/", auth, async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+const sendEmail = (senderData) => {
+  var smtpConfig = {
+    host: "smtp.gmail.com",
+    port: 587,
+    secure: false, // use SSL,
+    // you can try with TLS, but port is then 587
+    auth: {
+      user: "taskview1122@gmail.com", // Your email id
+      pass: "Task@123", // Your password
+    },
+  };
+
+  var transporter = nodemailer.createTransport(smtpConfig);
+  // replace hardcoded options with data passed (somedata)
+  var mailOptions = {
+    from: "taskview1122@gmail.com", // sender address
+    to: senderData.email, // list of receivers
+    subject: "Project share in Task view", // Subject line
+    text: "", //, // plaintext body
+    html: `<b>${senderData.project} ✔</b>`, // You can choose to send an HTML body instead
+  };
+
+  transporter.sendMail(mailOptions, function (error, info) {
+    if (error) {
+      console.log("Message failed: ", error);
+      return false;
+    } else {
+      console.log("Message sent: " + info.response);
+      return true;
+    }
+  });
+};
 
 module.exports = router;
