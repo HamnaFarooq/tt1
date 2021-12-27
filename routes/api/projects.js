@@ -227,7 +227,7 @@ router.get("/", auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id);
 
-    console.log(user.projects);
+    console.log("userProjects", user.projects);
 
     const ids = user.projects;
 
@@ -277,6 +277,7 @@ router.delete("/:project_id/:task_id", auth, async (req, res) => {
 router.get("/:project_id/", auth, async (req, res) => {
   try {
     const project = await Project.findOne({ _id: req.params.project_id });
+    console.log("project", project);
 
     let ids = [];
     var projects;
@@ -285,6 +286,18 @@ router.get("/:project_id/", auth, async (req, res) => {
 
     users = await User.find().where("_id").in(ids).exec();
     res.json(users);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+router.get("/single_project/:project_id/", auth, async (req, res) => {
+  try {
+    const project = await Project.findOne({ _id: req.params.project_id });
+    console.log("project123", project);
+
+    res.json(project);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -323,7 +336,9 @@ router.post("/share/:project_id", auth, async (req, res) => {
         data.senderData.email +
         " and you can " +
         data.shareType +
-        " it "
+        " it and link is  " +
+        "http://localhost:3000/" +
+        req.params.project_id
       }`,
     };
     sendEmail(emailContext);

@@ -1,9 +1,10 @@
-import { PROJECT_CREATED, TASK_CREATED, GET_PROJECTS, PROJECT_DELETED, TASK_DELETED, TASK_EDITED, TASK_DUPLICATED, USERS_COMMENT } from "../constants/actionTypes";
+import { PROJECT_CREATED, TASK_CREATED, GET_PROJECTS,SINGLE_PROJECT, PROJECT_DELETED, TASK_DELETED, TASK_EDITED, TASK_DUPLICATED, USERS_COMMENT } from "../constants/actionTypes";
 
 const INIT_STATE = {
     project: {}, //the project being currently worked upon
     projects: [], //all projects of logged in user
-    usersWhoCommented: [] //users who commented on selected project
+    usersWhoCommented: [], //users who commented on selected project
+    single_Project: []
 };
 
 export default (state = INIT_STATE, action) => {
@@ -69,7 +70,9 @@ export default (state = INIT_STATE, action) => {
 
         case USERS_COMMENT:
             return { ...state, usersWhoCommented: action.payload };
-
+            
+        case SINGLE_PROJECT:
+            return { ...state, single_Project: action.payload };
         default:
             return state;
     }

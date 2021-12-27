@@ -10,6 +10,7 @@ export const ACCOUNT_DELETED = "ACCOUNT_DELETED";
 
 
 export const DATE_SENT = "DATE_SENT";
+export const SINGLE_PROJECT = "SINGLE_PROJECT";
 
 
 export const PROJECT_CREATED = "PROJECT_CREATED";

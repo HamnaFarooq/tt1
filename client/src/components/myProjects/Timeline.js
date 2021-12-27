@@ -3,13 +3,15 @@ import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { useSelector } from "react-redux";
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import ModifyProject from "./ModifyProject";
 import NewProject from "./NewProject";
 import AddIcon from "@material-ui/icons/Add";
 import AddNewTask from "./AddNewTask";
 import { dateForTimeline } from "../../store/action/date";
 import { useDispatch } from "react-redux";
+import { getSingleProject } from "../../store/action/project";
+import { useLocation, Navigate  } from "react-router-dom";
 
 const {
   AccordionSummary,
@@ -134,8 +136,9 @@ const styles = {
   },
 };
 
-const MonthTimeline = ({ projects }) => {
+const MonthTimeline = ({ projects, status }) => {
   const dispatch = useDispatch();
+  console.log("prrr0", projects);
 
   const dateObject = useSelector((state) => state.date);
   // console.log("----------- ", dateObject.date)
@@ -214,7 +217,7 @@ const MonthTimeline = ({ projects }) => {
     let item = projects
       .flatMap((p) => p.tasks)
       .filter((t) => t.endDate)
-      ?.sort((o, n) =>{
+      ?.sort((o, n) => {
         let startDate = o.endDate.replace(/\s/g, "");
         var tmp = startDate.split("");
         tmp.splice(8, tmp.length);
@@ -245,15 +248,14 @@ const MonthTimeline = ({ projects }) => {
           "-" +
           endDate[0] +
           endDate[1];
-       return moment(startDate).isBefore(endDate)
+        return moment(startDate).isBefore(endDate)
           ? -1
           : moment(endDate).isAfter(endDate)
           ? 1
-          : 0
-      }
-      )
+          : 0;
+      })
       .pop();
-      console.log(item)
+    console.log(item);
     let startDate = item.startDate.replace(/\s/g, "");
     var tmp = startDate.split("");
     tmp.splice(8, tmp.length);
@@ -340,168 +342,187 @@ const MonthTimeline = ({ projects }) => {
           </div>
           {resetRefDate()}
           <div>
-            {projects.map((project, index) => (
-              <div>
-                {/* {setProjectId(project._id)} */}
-                <Accordion
-                  style={{ width: accordionWidth }}
-                  square
-                  defaultExpanded={true}
-                  elevation={0}
-                >
-                  <AccordionSummary
-                    style={{
-                      ...styles.accordion,
-                      backgroundColor: project.priority
-                        ? project.priority === "high"
-                          ? "purple"
-                          : project.priority === "moderate"
-                          ? "orange"
-                          : project.priority === "low" && "green"
-                        : "royalblue",
-                    }}
-                    expandIcon={<ExpandMoreIcon />}
+            {projects &&
+              projects.map((project, index) => (
+                <div>
+                  {/* {setProjectId(project._id)} */}
+                  <Accordion
+                    style={{ width: accordionWidth }}
+                    square
+                    defaultExpanded={true}
+                    elevation={0}
                   >
-                    <ButtonBase
-                      aria-describedby={id}
-                      onClick={(event) =>
-                        handleCLickNotif(event, project, index)
-                      }
+                    <AccordionSummary
                       style={{
-                        position: "absolute",
-                        left: 0,
-                        width: 31,
-                        background: "gray",
-                        height: "100%",
-                        top: 0,
+                        ...styles.accordion,
+                        backgroundColor: project?.priority
+                          ? project?.priority === "high"
+                            ? "purple"
+                            : project?.priority === "moderate"
+                            ? "orange"
+                            : project?.priority === "low" && "green"
+                          : "royalblue",
                       }}
+                      expandIcon={<ExpandMoreIcon />}
                     >
-                      <AddIcon
-                        style={{
-                          borderRadius: "100%",
-                          border: "1px solid white",
+                      <ButtonBase
+                        aria-describedby={id}
+                        onClick={(event) => {
+                          if (status) {
+                            if (status === "viewer") {
+                              alert("you can only view this project");
+                            } else {
+                              return <Navigate  to="/" />;
+                            }
+                          } else {
+                            handleCLickNotif(event, project, index);
+                          }
                         }}
-                        fontSize="small"
-                      />
-                    </ButtonBase>
-                    <Typography style={{ marginLeft: 20 }}>
-                      {project.name}
-                    </Typography>
-                  </AccordionSummary>
-                  {project.tasks.map((task, index) => (
-                    <div style={styles.flexRow}>
-                      <div style={styles.taskContainer}>
-                        <Typography
+                        style={{
+                          position: "absolute",
+                          left: 0,
+                          width: 31,
+                          background: "gray",
+                          height: "100%",
+                          top: 0,
+                        }}
+                      >
+                        <AddIcon
                           style={{
-                            ...styles.taskText,
-                            borderBottomColor:
-                              index === project.tasks.length - 1
-                                ? "white"
-                                : "lightGrey",
+                            borderRadius: "100%",
+                            border: "1px solid white",
                           }}
-                        >
-                          {task.name}
-                        </Typography>
-                      </div>
-                      {/** rendering boxes */}
+                          fontSize="small"
+                        />
+                      </ButtonBase>
+                      <Typography style={{ marginLeft: 20 }}>
+                        {project?.name}
+                      </Typography>
+                    </AccordionSummary>
+                    {project?.tasks.map((task, index) => (
                       <div style={styles.flexRow}>
-                        {[...Array(monthsDiff)].map((x) => (
-                          <div style={styles.flexRow}>
-                            {[
-                              ...Array(
-                                referenceDate.daysInMonth() > 28 ? 5 : 4
-                              ),
-                            ].map((x, i) => {
-                              let compareResult = false;
-                              let taskvalue = " ";
+                        <div style={styles.taskContainer}>
+                          <Typography
+                            style={{
+                              ...styles.taskText,
+                              borderBottomColor:
+                                index === project.tasks.length - 1
+                                  ? "white"
+                                  : "lightGrey",
+                            }}
+                          >
+                            {task.name}
+                          </Typography>
+                        </div>
+                        {/** rendering boxes */}
+                        <div style={styles.flexRow}>
+                          {[...Array(monthsDiff)].map((x) => (
+                            <div style={styles.flexRow}>
+                              {[
+                                ...Array(
+                                  referenceDate.daysInMonth() > 28 ? 5 : 4
+                                ),
+                              ].map((x, i) => {
+                                let compareResult = false;
+                                let taskvalue = " ";
 
-                              const strtDate = moment(
-                                task.startDate,
-                                "DD-MM-YYYY"
-                              );
-                              const dueDate = moment(
-                                task.endDate,
-                                "DD-MM-YYYY"
-                              );
-                              for (
-                                let j = 0;
-                                j < 7 &&
-                                referenceDate.get("date") <
-                                  referenceDate.daysInMonth();
-                                j++
-                              ) {
-                                referenceDate.isBetween(strtDate, dueDate) &&
-                                  (compareResult = true);
+                                const strtDate = moment(
+                                  task.startDate,
+                                  "DD-MM-YYYY"
+                                );
+                                const dueDate = moment(
+                                  task.endDate,
+                                  "DD-MM-YYYY"
+                                );
+                                for (
+                                  let j = 0;
+                                  j < 7 &&
+                                  referenceDate.get("date") <
+                                    referenceDate.daysInMonth();
+                                  j++
+                                ) {
+                                  referenceDate.isBetween(strtDate, dueDate) &&
+                                    (compareResult = true);
 
-                                referenceDate.format("DD MM YYYY") ===
-                                  strtDate.format("DD MM YYYY") &&
-                                  (compareResult = true) &&
-                                  (taskvalue = strtDate.format("ddd DD"));
-                                referenceDate.format("DD MM YYYY") ===
-                                  dueDate.format("DD MM YYYY") &&
-                                  (compareResult = true) &&
-                                  (taskvalue = dueDate.format("ddd DD"));
+                                  referenceDate.format("DD MM YYYY") ===
+                                    strtDate.format("DD MM YYYY") &&
+                                    (compareResult = true) &&
+                                    (taskvalue = strtDate.format("ddd DD"));
+                                  referenceDate.format("DD MM YYYY") ===
+                                    dueDate.format("DD MM YYYY") &&
+                                    (compareResult = true) &&
+                                    (taskvalue = dueDate.format("ddd DD"));
 
+                                  referenceDate.add(1, "days");
+                                }
+
+                                return (
+                                  <div
+                                    style={{
+                                      ...styles.gridBoxContainer,
+                                      borderColor: compareResult
+                                        ? project?.priority
+                                          ? project?.priority === "high"
+                                            ? "purple"
+                                            : project?.priority === "moderate"
+                                            ? "orange"
+                                            : project?.priority === "low" &&
+                                              "green"
+                                          : "royalblue"
+                                        : "lightGrey",
+                                      backgroundColor: compareResult
+                                        ? project?.priority
+                                          ? project?.priority === "high"
+                                            ? "purple"
+                                            : project?.priority === "moderate"
+                                            ? "orange"
+                                            : project?.priority === "low" &&
+                                              "green"
+                                          : "royalblue"
+                                        : "#f5f5f5",
+                                    }}
+                                  >
+                                    {compareResult && (
+                                      <ButtonBase
+                                        aria-describedby={id}
+                                        onClick={(event) => {
+                                          if (status) {
+                                            if (status === "viewer") {
+                                              alert(
+                                                "you can only view this project"
+                                              );
+                                            } else {
+                                              return <Navigate  to="/" />;
+                                            }
+                                          } else {
+                                            handleClickAndSendProps(
+                                              event,
+                                              project,
+                                              index
+                                            );
+                                          }
+                                        }}
+                                        style={{ color: "white", width: 60 }}
+                                      >
+                                        {taskvalue}
+                                      </ButtonBase>
+                                    )}
+                                    {/* {add7DaysToRefDate()} */}
+                                  </div>
+                                );
+                              })}
+                              {(() => {
                                 referenceDate.add(1, "days");
-                              }
-
-                              return (
-                                <div
-                                  style={{
-                                    ...styles.gridBoxContainer,
-                                    borderColor: compareResult
-                                      ? project.priority
-                                        ? project.priority === "high"
-                                          ? "purple"
-                                          : project.priority === "moderate"
-                                          ? "orange"
-                                          : project.priority === "low" &&
-                                            "green"
-                                        : "royalblue"
-                                      : "lightGrey",
-                                    backgroundColor: compareResult
-                                      ? project.priority
-                                        ? project.priority === "high"
-                                          ? "purple"
-                                          : project.priority === "moderate"
-                                          ? "orange"
-                                          : project.priority === "low" &&
-                                            "green"
-                                        : "royalblue"
-                                      : "#f5f5f5",
-                                  }}
-                                >
-                                  {compareResult && (
-                                    <ButtonBase
-                                      aria-describedby={id}
-                                      onClick={(event) =>
-                                        handleClickAndSendProps(
-                                          event,
-                                          project,
-                                          index
-                                        )
-                                      }
-                                      style={{ color: "white", width: 60 }}
-                                    >
-                                      {taskvalue}
-                                    </ButtonBase>
-                                  )}
-                                  {/* {add7DaysToRefDate()} */}
-                                </div>
-                              );
-                            })}
-                            {(() => {
-                              referenceDate.add(1, "days");
-                            })()}
-                          </div>
-                        ))}
+                              })()}
+                            </div>
+                          ))}
+                        </div>
+                        {resetRefDate()}
                       </div>
-                      {resetRefDate()}
-                    </div>
-                  ))}
-                </Accordion>
-              </div>
-            ))}
+                    ))}
+                  </Accordion>
+                </div>
+              ))}
           </div>
         </div>
         {showPojectDetail && (
@@ -545,7 +566,8 @@ const MonthTimeline = ({ projects }) => {
   );
 };
 
-const WeekTimeline = ({ projects }) => {
+const WeekTimeline = ({ projects, status }) => {
+  const dispatch = useDispatch();
   const dateObject = useSelector((state) => state.date);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -580,6 +602,88 @@ const WeekTimeline = ({ projects }) => {
   const resetRefDate = () => {
     referenceDate = moment(startDate).subtract(moment(startDate).day(), "days");
   };
+
+  useEffect(() => {
+    if (!projects?.length) return;
+    let item = projects
+      .flatMap((p) => p.tasks)
+      .filter((t) => t.endDate)
+      ?.sort((o, n) => {
+        let startDate = o.endDate.replace(/\s/g, "");
+        var tmp = startDate.split("");
+        tmp.splice(8, tmp.length);
+        startDate = tmp.join("");
+        startDate =
+          startDate[4] +
+          startDate[5] +
+          startDate[6] +
+          startDate[7] +
+          "-" +
+          startDate[2] +
+          startDate[3] +
+          "-" +
+          startDate[0] +
+          startDate[1];
+        let endDate = n.endDate.replace(/\s/g, "");
+        var tmp1 = endDate.split("");
+        tmp1.splice(8, tmp1.length);
+        endDate = tmp1.join("");
+        endDate =
+          endDate[4] +
+          endDate[5] +
+          endDate[6] +
+          endDate[7] +
+          "-" +
+          endDate[2] +
+          endDate[3] +
+          "-" +
+          endDate[0] +
+          endDate[1];
+        return moment(startDate).isBefore(endDate)
+          ? -1
+          : moment(endDate).isAfter(endDate)
+          ? 1
+          : 0;
+      })
+      .pop();
+    console.log(item);
+    let startDate = item.startDate.replace(/\s/g, "");
+    var tmp = startDate.split("");
+    tmp.splice(8, tmp.length);
+    startDate = tmp.join("");
+    startDate =
+      startDate[4] +
+      startDate[5] +
+      startDate[6] +
+      startDate[7] +
+      "-" +
+      startDate[2] +
+      startDate[3] +
+      "-" +
+      startDate[0] +
+      startDate[1];
+    let endDate = item.endDate.replace(/\s/g, "");
+    var tmp1 = endDate.split("");
+    tmp1.splice(8, tmp1.length);
+    endDate = tmp1.join("");
+    endDate =
+      endDate[4] +
+      endDate[5] +
+      endDate[6] +
+      endDate[7] +
+      "-" +
+      endDate[2] +
+      endDate[3] +
+      "-" +
+      endDate[0] +
+      endDate[1];
+    dispatch(
+      dateForTimeline({
+        startDateToUse: startDate,
+        endDateToUse: endDate,
+      })
+    );
+  }, [dispatch, projects]);
 
   return (
     <div style={styles.container}>
@@ -639,12 +743,12 @@ const WeekTimeline = ({ projects }) => {
                 <AccordionSummary
                   style={{
                     ...styles.accordion,
-                    backgroundColor: project.priority
-                      ? project.priority === "high"
+                    backgroundColor: project?.priority
+                      ? project?.priority === "high"
                         ? "purple"
-                        : project.priority === "moderate"
+                        : project?.priority === "moderate"
                         ? "orange"
-                        : project.priority === "low" && "green"
+                        : project?.priority === "low" && "green"
                       : "royalblue",
                   }}
                   expandIcon={<ExpandMoreIcon />}
@@ -696,21 +800,21 @@ const WeekTimeline = ({ projects }) => {
                               style={{
                                 ...styles.gridBoxContainer,
                                 borderColor: compareResult
-                                  ? project.priority
-                                    ? project.priority === "high"
+                                  ? project?.priority
+                                    ? project?.priority === "high"
                                       ? "purple"
-                                      : project.priority === "moderate"
+                                      : project?.priority === "moderate"
                                       ? "orange"
-                                      : project.priority === "low" && "green"
+                                      : project?.priority === "low" && "green"
                                     : "royalblue"
                                   : "lightGrey",
                                 backgroundColor: compareResult
-                                  ? project.priority
-                                    ? project.priority === "high"
+                                  ? project?.priority
+                                    ? project?.priority === "high"
                                       ? "purple"
-                                      : project.priority === "moderate"
+                                      : project?.priority === "moderate"
                                       ? "orange"
-                                      : project.priority === "low" && "green"
+                                      : project?.priority === "low" && "green"
                                     : "royalblue"
                                   : "#f5f5f5",
                               }}
@@ -764,10 +868,33 @@ const WeekTimeline = ({ projects }) => {
   );
 };
 
-const Timeline = ({ monthTimeline, projects }) => {
+const Timeline = ({ monthTimeline }) => {
   // console.log("projects are: ", projects);
   const projectObj = useSelector((state) => state.project);
   //fetching projects again and sending instead of using prop. no difference detected
+  const single_Project = useSelector((state) => state.project.single_Project);
+  console.log("single_project", single_Project);
+  const dispatch = useDispatch();
+  const [pathLocation, setPathLocation] = useState("");
+  const [status, setStatus] = useState("");
+
+  let location = useLocation();
+
+  useEffect(() => {
+    if (location.pathname) {
+      setPathLocation(location.pathname);
+      if (location.pathname !== "/") {
+        location = location.pathname.slice(1);
+        location = location.split("/");
+        console.log("pathname", location);
+        setStatus(location[1]);
+        dispatch(getSingleProject(location[0]));
+      }
+    }
+  }, [dispatch]);
+
+  if (pathLocation !== "/")
+    return <MonthTimeline projects={single_Project} status={status} />;
   return monthTimeline ? (
     <MonthTimeline projects={projectObj.projects.projects} />
   ) : (

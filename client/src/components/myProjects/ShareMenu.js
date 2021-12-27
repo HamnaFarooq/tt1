@@ -173,6 +173,7 @@ export default function ShareMenu({ handleClose }) {
             Share Link
           </Typography>
           <div style={styles.row}>
+          {console.log("age",age)}
             <TextField
               size="small"
               name="sharelink"
@@ -182,7 +183,7 @@ export default function ShareMenu({ handleClose }) {
               disabled={true}
               label={
                 age?.name
-                  ? `${age.name} will be shared`
+                  ? `${age.name} will be shared link is http://localhost:3000/${age._id}`
                   : "Select project to share"
               }
               variant="outlined"

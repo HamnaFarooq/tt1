@@ -13,6 +13,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import NewLegend from './components/myProjects/NewLegend';
 import Dashboard from './components/myProjects/Dashboard';
+import Timeline from './components/myProjects/Timeline';
 import Home from './container/Home';
 import Notifications from './components/myProjects/Notifications';
 import DateTime from './components/myProjects/DateTime';
@@ -57,6 +58,7 @@ const App = () => {
           <Switch>
             <Route exact path='/' component={Home} />
             <Route exact path='/side-view' component={Dashboard} />
+            <Route exact path='/:id/:status' component={Timeline} />
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 24 }}>
               <Route exact path='/login' component={Login} />
               <Route exact path='/signup' component={Signup} />

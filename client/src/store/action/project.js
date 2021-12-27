@@ -1,4 +1,4 @@
-import { PROJECT_CREATED, TASK_CREATED, GET_PROJECTS, PROJECT_DELETED, TASK_DELETED, TASK_EDITED, USERS_COMMENT, TASK_DUPLICATED } from "../constants/actionTypes";
+import { PROJECT_CREATED, TASK_CREATED, GET_PROJECTS, PROJECT_DELETED,SINGLE_PROJECT, TASK_DELETED, TASK_EDITED, USERS_COMMENT, TASK_DUPLICATED } from "../constants/actionTypes";
 import axios from "axios";
 import socket from "../../utils/socketConn";
 
@@ -83,6 +83,18 @@ export const getAllUsersWhoCommented = (project_id) => async dispatch => {
         console.log(err);
     }
 };
+export const getSingleProject= (project_id) => async dispatch => {
+
+    try {
+        const res = await axios.get(`/api/projects/single_project/${project_id}`);
+        let data = []
+        data.push(res.data)
+        console.log("resssss",data)
+        dispatch({ type: SINGLE_PROJECT, payload: data });
+    } catch (err) {
+        console.log(err);
+    }
+};
 
 
 //Get all projects of user
@@ -143,7 +155,10 @@ export const shareProject = (project_id,project_name, email, shareType, authDeta
     try {
         const res = await axios.post(`/api/projects/share/${project_id}`, body, config);
         // dispatch({ type: TASK_EDITED, payload: res.data });
-        alert("Project shared")
+        console.log("res",res)
+        if(res.status===200){
+            alert("Project shared")
+        }
     } catch (err) {
         if (err) {
             console.error(err);
