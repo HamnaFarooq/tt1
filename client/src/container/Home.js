@@ -6,7 +6,6 @@ import TaskCreate from "../components/myProjects/TaskCreate";
 import Timeline from "../components/myProjects/Timeline";
 import { useSelector } from "react-redux";
 import Loading from "react-fullscreen-loading";
-import { ToastContainer, toast } from "react-toastify";
 
 
 const Home = (props) => {
