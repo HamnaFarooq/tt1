@@ -6,19 +6,21 @@ import TaskCreate from "../components/myProjects/TaskCreate";
 import Timeline from "../components/myProjects/Timeline";
 import { useSelector } from "react-redux";
 import Loading from "react-fullscreen-loading";
+import { ToastContainer, toast } from "react-toastify";
+
 
 const Home = (props) => {
   console.log("props", props);
   const isAuthenticatedVal = useSelector((state) => state.auth);
   const projectObj = useSelector((state) => state.project);
-  const [loading, setLoading] = useState(true);
   // console.log("projects: ", projectObj.projects?.projects?.length)
+  const [loading, setLoading] = useState(true)
   useEffect(() => {
     setTimeout(() => {
         setLoading(false)
     }, 3000);
-  });
-  if(loading)
+  },[loading]);
+  if(loading || isAuthenticatedVal.loading)
   {
       return <Loading loading background="" loaderColor="#000000" />
   }
@@ -33,9 +35,10 @@ const Home = (props) => {
       }}
     >
       {/* <div style={{ width: "20%" }}> */}
+
       <div>
-        {isAuthenticatedVal.isAuthenticated ? (
-          projectObj.projects?.projects?.length > 0 ? (
+        {localStorage.getItem("isAthenticated") ? (
+          localStorage.getItem("localproject") ? (
             <SideView />
           ) : (
             <TaskCreate />
@@ -48,7 +51,7 @@ const Home = (props) => {
       {/* <div style={{ width: "78%" }}> */}
       <div style={{ width: "100%", overflow: "hidden" }}>
         {/* {console.log("projets: ", projectObj.projects.projects.length)} */}
-        {isAuthenticatedVal.isAuthenticated &&
+        {localStorage.getItem("isAthenticated") &&
           projectObj.projects?.projects?.length > 0 && (
             <Dashboard projects={projectObj.projects.projects} />
           )}

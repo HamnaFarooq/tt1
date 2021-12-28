@@ -15,7 +15,7 @@ import DateRangeIcon from "@material-ui/icons/DateRange";
 import { login } from "../../store/action/auth";
 import DateRange from "./DateRange";
 import { useHistory } from "react-router-dom";
-import moment from 'moment'
+import moment from "moment";
 
 import { createProject } from "../../store/action/project";
 
@@ -71,6 +71,7 @@ const TaskCreate = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    console.log("pass",password)
     dispatch(login(email, password));
   };
 
@@ -82,8 +83,12 @@ const TaskCreate = () => {
       description: "",
       // startDate: dateValueObj.date.startDateToUse,
       // endDate: dateValueObj.date.endDateToUse,
-      startDate: moment(dateValueObj.date.startDateToUse).format('DD MM YYYYThh:mm'),
-      endDate: moment(dateValueObj.date.endDateToUse).format('DD MM YYYYThh:mm')
+      startDate: moment(dateValueObj.date.startDateToUse).format(
+        "DD MM YYYYThh:mm"
+      ),
+      endDate: moment(dateValueObj.date.endDateToUse).format(
+        "DD MM YYYYThh:mm"
+      ),
       // startDate: moment(dateValueObj.date.startDateToUse).format("DD/MM/YYYY"),
       // endDate: moment(dateValueObj.date.endDateToUse).format("DD/MM/YYYY")
     },
@@ -117,7 +122,7 @@ const TaskCreate = () => {
       </div>
       <Button
         style={{ marginTop: 8 }}
-        onClick={() => { }}
+        onClick={() => {}}
         color="primary"
         size="small"
       >
@@ -249,6 +254,13 @@ const TaskCreate = () => {
         >
           <InputLabel style={{ marginBottom: 4 }}>Email</InputLabel>
           <TextField
+            error={
+              email !== '' &&(
+              /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+                ? false
+                : true
+              )
+            }
             style={{ marginBottom: 8 }}
             variant="outlined"
             size="small"
@@ -260,9 +272,11 @@ const TaskCreate = () => {
           <InputLabel style={{ marginBottom: 4 }}>Password</InputLabel>
           <TextField
             style={{ marginBottom: 8 }}
-            variant="outlined"
             size="small"
             name="password"
+            variant="outlined"
+            type="password"
+            autoComplete="current-password"
             value={password}
             onChange={(e) => onChange(e)}
           />
@@ -286,7 +300,7 @@ const TaskCreate = () => {
               }
               label="Remember me"
             />
-            <Typography onClick={() => { }} style={{ marginTop: 8 }}>
+            <Typography onClick={() => {}} style={{ marginTop: 8 }}>
               Forgot password?
             </Typography>
           </div>
@@ -302,7 +316,11 @@ const TaskCreate = () => {
           >
             Login
           </Button>
-          <Typography style={{ marginBottom: 8 }} align="center" variant="body2">
+          <Typography
+            style={{ marginBottom: 8 }}
+            align="center"
+            variant="body2"
+          >
             Not a member yet?{" "}
             <Link onClick={() => history.push("/signup")} variant="body2">
               {"Join us"}

@@ -1,4 +1,4 @@
-import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_PROFILE } from "../constants/actionTypes";
+import { REGISTER_SUCCESS, REGISTER_FAIL, USER_LOADED, AUTH_ERROR,LOADER_TRUE,LOADER_FALSE, LOGIN_SUCCESS, LOGIN_FAIL, LOGOUT, CLEAR_PROFILE } from "../constants/actionTypes";
 import axios from "axios";
 import setAuthToken from '../../utils/setAuthToken';
 import { getAllProjects } from "./project";
@@ -66,18 +66,21 @@ export const login = (email, password) => async dispatch => {
     const body = JSON.stringify({ email, password });
 
     try {
+        dispatch({ type: LOADER_TRUE, payload: "" });
         const res = await axios.post('/api/auth', body, config);
-
+        
         dispatch({ type: LOGIN_SUCCESS, payload: res.data });
         dispatch(loadUser());   //after logging in, also load user data
 
     } catch (err) {
 
         if (err) {
-            console.error(err);
+            console.error("error",err);
+            alert("Email/password wrong")
         }
 
         dispatch({ type: LOGIN_FAIL });
+
     }
 }
 

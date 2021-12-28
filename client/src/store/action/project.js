@@ -103,6 +103,7 @@ export const getAllProjects = () => async dispatch => {
     try {
         const res = await axios.get('/api/projects');
         console.log("getting all projects");
+        localStorage.setItem("localproject", JSON.stringify(res.data))
         dispatch({ type: GET_PROJECTS, payload: res.data });
     } catch (err) {
         console.log(err);

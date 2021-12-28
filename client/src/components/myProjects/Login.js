@@ -82,12 +82,12 @@ const Login = () => {
           onChange={(e) => onChange(e)}
         />
 
-        <InputLabel style={{ marginBottom: 4 }}>Password</InputLabel>
         <TextField
           style={{ marginBottom: 8 }}
-          variant="outlined"
-          size="small"
-          name="password"
+          id="outlined-password-input"
+          label="Password"
+          type="password"
+          autoComplete="current-password"
           value={password}
           onChange={(e) => onChange(e)}
         />
