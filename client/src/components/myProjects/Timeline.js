@@ -368,6 +368,7 @@ const MonthTimeline = ({ projects, status }) => {
                     >
                       <ButtonBase
                         aria-describedby={id}
+                        disabled={project.alteration[0]?.editType === "viewer" ? true : false}
                         onClick={(event) => {
                           if (status) {
                             if (status === "viewer") {
