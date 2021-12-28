@@ -11,7 +11,7 @@ import AddNewTask from "./AddNewTask";
 import { dateForTimeline } from "../../store/action/date";
 import { useDispatch } from "react-redux";
 import { getSingleProject } from "../../store/action/project";
-import { useLocation, Navigate  } from "react-router-dom";
+import { useLocation, Redirect, useHistory } from "react-router-dom";
 
 const {
   AccordionSummary,
@@ -147,6 +147,7 @@ const MonthTimeline = ({ projects, status }) => {
   const [project, setProject] = useState({});
   const [showPojectDetail, setShowProjectDetail] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const history = useHistory();
 
   // console.log("project id to be sent as prop is: ", projectId);
 
@@ -372,7 +373,7 @@ const MonthTimeline = ({ projects, status }) => {
                             if (status === "viewer") {
                               alert("you can only view this project");
                             } else {
-                              return <Navigate  to="/" />;
+                              history.push("/");
                             }
                           } else {
                             handleCLickNotif(event, project, index);
@@ -492,7 +493,7 @@ const MonthTimeline = ({ projects, status }) => {
                                                 "you can only view this project"
                                               );
                                             } else {
-                                              return <Navigate  to="/" />;
+                                              history.push("/");
                                             }
                                           } else {
                                             handleClickAndSendProps(

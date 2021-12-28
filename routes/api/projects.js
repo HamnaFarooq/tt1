@@ -292,7 +292,7 @@ router.get("/:project_id/", auth, async (req, res) => {
   }
 });
 
-router.get("/single_project/:project_id/", auth, async (req, res) => {
+router.get("/single_project/:project_id/", async (req, res) => {
   try {
     const project = await Project.findOne({ _id: req.params.project_id });
     console.log("project123", project);
