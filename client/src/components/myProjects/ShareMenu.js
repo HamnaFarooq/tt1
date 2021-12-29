@@ -58,7 +58,6 @@ export default function ShareMenu({ handleClose }) {
   const dispatch = useDispatch();
   const isAuthenticatedVal = useSelector((state) => state.auth);
 
-
   const [userEmail, setUserEmail] = useState("");
   const [sharelink, setsharelink] = useState("");
 
@@ -73,7 +72,6 @@ export default function ShareMenu({ handleClose }) {
   const [age, setAge] = useState("");
   const [shareType, setShareType] = useState("");
 
-
   const handleChange = (event) => {
     setAge(event.target.value);
     console.log(event.target.value);
@@ -83,11 +81,17 @@ export default function ShareMenu({ handleClose }) {
     setsharelink(e.target.value);
   };
 
-
   const executeShareAndHandleClose = () => {
-    dispatch(shareProject(age._id,age.name, userEmail,shareType,isAuthenticatedVal.user));
+    dispatch(
+      shareProject(
+        age._id,
+        age.name,
+        userEmail,
+        shareType,
+        isAuthenticatedVal.user
+      )
+    );
     handleClose();
-
   };
 
   const data = [
@@ -158,7 +162,7 @@ export default function ShareMenu({ handleClose }) {
               id="demo-simple-select"
               value={shareType}
             >
-              {["viewer","editor"].map((item,index) => (
+              {["viewer", "editor"].map((item, index) => (
                 <div key={indexedDB}>
                   <MenuItem value={item}>
                     <Button value={item} onClick={() => setShareType(item)}>
@@ -169,28 +173,33 @@ export default function ShareMenu({ handleClose }) {
               ))}
             </Select>
           </div>
-          <Typography style={{ padding: 8 }} variant="body1">
-            Share Link
-          </Typography>
-          <div style={styles.row}>
-          {console.log("age",age)}
-            <TextField
-              size="small"
-              name="sharelink"
-              onChange={handlesharelink}
-              fullWidth
-              id="outlined-basic"
-              disabled={true}
-              label={
-                age?.name
-                  ? `${age.name} will be shared link is http://localhost:3000/${age._id}`
-                  : "Select project to share"
-              }
-              variant="outlined"
-            />
-            {/* <Button style={{ marginLeft: 8 }} variant="outlined">Editor</Button>
-            <Button style={{ marginLeft: 8 }} variant="outlined">Copy</Button> */}
-          </div>
+          {shareType && age.name ? (
+            <>
+              <Typography style={{ padding: 8 }} variant="body1">
+                Share Link
+              </Typography>
+              <div style={styles.row}>
+                <TextField
+                  size="small"
+                  name="sharelink"
+                  onChange={handlesharelink}
+                  fullWidth
+                  id="outlined-basic"
+                  disabled={true}
+                  defaultValue={
+                    shareType && `http://localhost:3000/${age._id}/${shareType}`
+                  }
+                  variant="outlined"
+                />
+                {/* <Button style={{ marginLeft: 8 }} variant="outlined">Editor</Button>
+                <Button style={{ marginLeft: 8 }} variant="outlined">Copy</Button> */}
+              </div>
+            </>
+          ) : (
+            <Typography style={{ padding: 8 }} variant="body1">
+              Select project and type for link
+            </Typography>
+          )}
           <Typography style={{ padding: 8 }} variant="body1">
             Email/Note
           </Typography>

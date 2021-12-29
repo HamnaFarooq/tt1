@@ -71,7 +71,6 @@ const TaskCreate = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log("pass",password)
     dispatch(login(email, password));
   };
 

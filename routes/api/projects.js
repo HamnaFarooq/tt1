@@ -338,7 +338,9 @@ router.post("/share/:project_id", auth, async (req, res) => {
         data.shareType +
         " it and link is  " +
         "http://localhost:3000/" +
-        req.params.project_id
+        req.params.project_id +
+        "/" +
+        data.shareType
       }`,
     };
     sendEmail(emailContext);
