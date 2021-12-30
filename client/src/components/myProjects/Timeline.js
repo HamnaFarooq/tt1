@@ -257,7 +257,7 @@ const MonthTimeline = ({ projects, status }) => {
       })
       .pop();
     console.log(item);
-    let startDate = item.startDate.replace(/\s/g, "");
+    let startDate = item?.startDate.replace(/\s/g, "");
     var tmp = startDate.split("");
     tmp.splice(8, tmp.length);
     startDate = tmp.join("");
@@ -272,7 +272,7 @@ const MonthTimeline = ({ projects, status }) => {
       "-" +
       startDate[0] +
       startDate[1];
-    let endDate = item.endDate.replace(/\s/g, "");
+    let endDate = item?.endDate.replace(/\s/g, "");
     var tmp1 = endDate.split("");
     tmp1.splice(8, tmp1.length);
     endDate = tmp1.join("");
@@ -649,7 +649,7 @@ const WeekTimeline = ({ projects, status }) => {
       })
       .pop();
     console.log(item);
-    let startDate = item.startDate.replace(/\s/g, "");
+    let startDate = item?.startDate.replace(/\s/g, "");
     var tmp = startDate.split("");
     tmp.splice(8, tmp.length);
     startDate = tmp.join("");
@@ -664,7 +664,7 @@ const WeekTimeline = ({ projects, status }) => {
       "-" +
       startDate[0] +
       startDate[1];
-    let endDate = item.endDate.replace(/\s/g, "");
+    let endDate = item?.endDate.replace(/\s/g, "");
     var tmp1 = endDate.split("");
     tmp1.splice(8, tmp1.length);
     endDate = tmp1.join("");
