@@ -117,7 +117,7 @@ const SideView = () => {
       </Popover>
 
       <List disablePadding>
-        {projectObj.projects.projects.map((project) => (
+        {projectObj.projects.projects && projectObj.projects.projects.map((project) => (
           <div key={project._id}>
             <Accordion square>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
