@@ -28,7 +28,6 @@ import setAuthToken from "./utils/setAuthToken";
 import Signup from "./components/myProjects/Signup";
 import socket from "./utils/socketConn";
 import AddNewTask from "./components/myProjects/AddNewTask";
-import "react-toastify/dist/ReactToastify.css";
 
 if (localStorage.token) {
   setAuthToken(localStorage.token);
