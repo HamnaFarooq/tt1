@@ -1,5 +1,5 @@
 const {io} = require("socket.io-client");
-const URL = "http://localhost:5000/";
+const URL = "https://task-view1122.herokuapp.com/";
 const socketIO=(name) =>{
   return io(URL, {
     transports: ["websocket"],
